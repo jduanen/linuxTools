@@ -1,4 +1,7 @@
 #!/bin/bash
+# Script to scan for new devices in a given IP address range
+#
+# Usage: ipAddrLocator.sh <ipaRange>
 
 if [ "$#" -ne 1 ]; then
 	echo "Must provide network address range"

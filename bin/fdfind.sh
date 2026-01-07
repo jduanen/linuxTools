@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to remind me how to us fdfind
+# Script to remind me how to use fdfind
 
 echo "fdfind <options> \"<pattern>\" <searchPath>"
 echo "some options:"

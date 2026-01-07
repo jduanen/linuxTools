@@ -1,4 +1,6 @@
 #!/bin/bash
+# Script to disable and remove CUPS
+
 echo "Removing CUPS..."
 sudo systemctl --reverse list-dependencies cups.*
 sudo systemctl stop avahi-daemon.service

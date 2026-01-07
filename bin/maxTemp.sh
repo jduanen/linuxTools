@@ -1,4 +1,5 @@
 #!/bin/bash
+# Script to monitor the temperature of a RasPi CPU
 
 hiTemp=0
 
