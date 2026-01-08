@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to search for ollama models that can be pulled by a ollama container
+# Script to search for models that can be pulled by an ollama container
 #
 
 USAGE="$0 <modelPrefix>"  ## matches models starting with the given string
