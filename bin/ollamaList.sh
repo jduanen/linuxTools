@@ -3,6 +3,8 @@
 # Script to search for models that can be pulled by an ollama container
 #
 
+#### TODO parse more of the response page and extract the model sizes (e.g., '20b, 120b')
+
 USAGE="$0 <modelPrefix>"  ## matches models starting with the given string
 
 ####curl -s https://registry.ollama.ai/v2/library/ | jq -r 'keys[]'
