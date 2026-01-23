@@ -2,6 +2,8 @@
 # Script to scan for new devices in a given IP address range
 #
 # Usage: ipAddrLocator.sh <ipaRange>
+#
+# Requires that the nmap package is installed (includes ndiff)
 
 if [ "$#" -ne 1 ]; then
 	echo "Must provide network address range"
