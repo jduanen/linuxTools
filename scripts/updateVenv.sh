@@ -4,6 +4,8 @@
 #
 # N.B. you have to be in the desired venv: e.g., 'workon ESPHOME'
 
+python3 -m ensurepip --default-pip
+
 pip list --outdated | grep "pip" > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     echo "$0: pip needs to be updated"
