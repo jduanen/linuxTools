@@ -14,5 +14,5 @@ docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v portainer_data:/data \
   --shm-size=1gb \
-  portainer/portainer-ce:lts \
+  portainer/portainer-ce:latest \
   --tunnel-port 8001
