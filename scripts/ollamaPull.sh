@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to pull the given ollama model into the local ollama container
+# Script to pull a model from the Ollama website into the local Ollama container
 
 CONTAINER_ID=$(docker ps -q --filter ancestor=ollama/ollama)
 

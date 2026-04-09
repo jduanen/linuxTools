@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to list the ollama models currently in the local ollama container
+# Script to list the ollama models currently loaded in the local Ollama container
 
 CONTAINER_ID=$(docker ps -q --filter ancestor=ollama/ollama)
 

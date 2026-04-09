@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to search for models that can be pulled by an ollama container
+# Script to list models available for download from the Ollama website
 #
 
 #### TODO parse more of the response page and extract the model sizes (e.g., '20b, 120b')
