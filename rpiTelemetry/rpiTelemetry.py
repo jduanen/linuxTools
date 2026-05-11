@@ -273,8 +273,8 @@ def run(args: argparse.Namespace) -> None:
         DISCOVERY_CONFIGS.append(app_conf)
 
     if args.remove:
-        for topic, payload in DISCOVERY_CONFIGS:
-            result = client.publish(topic, payload, qos=1, retain=True)
+        for topic, _ in DISCOVERY_CONFIGS:
+            result = client.publish(topic, "", qos=1, retain=True)
             if result.rc == mqtt.MQTT_ERR_SUCCESS:
                 log.info("Null published: %s", topic)
             else:
