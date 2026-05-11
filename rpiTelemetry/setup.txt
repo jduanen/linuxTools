@@ -11,20 +11,52 @@
 
 # activate venv and install packages
 * `source ./venv/bin/activate`
-* `python3 -m pip install -r requirements.txt.pi0`
+* `python3 -m pip install -r requirements.txt`
 
 # install and configure chrony client
-  * `sudo apt update`
-  * `sudo apt install chrony`
-  * `sudo systemctl stop systemd-timesyncd`
-  * `sudo systemctl disable systemd-timesyncd`
-  * `sudo systemctl enable --now chronyd`
-  * `sudo cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig`
-  * `sudo ex /etc/chrony/chrony.conf`
-    - comment out default pools
-    - use Ubuntu machine as chrony server
-      * `server 192.168.166.13 iburst`
-    - allow network corrections if needed
-      * `allow 192.168.166.0/24`
-  * restart chronyd
-    - `sudo systemctl restart chronyd`
+* `sudo apt update`
+* `sudo apt install chrony`
+* `sudo systemctl stop systemd-timesyncd`
+* `sudo systemctl disable systemd-timesyncd`
+* `sudo systemctl enable --now chronyd`
+* `sudo cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig`
+* `sudo ex /etc/chrony/chrony.conf`
+  - comment out default pools
+  - use Ubuntu machine as chrony server
+    * `server 192.168.166.13 iburst`
+  - allow network corrections if needed
+    * `allow 192.168.166.0/24`
+* restart chronyd
+  - `sudo systemctl restart chronyd`
+
+# configure and setup the rpiTelemetry service
+* `cd ${HOME}/Code/linuxTools/rpiTelemetry/`
+* `sudo cp etc/systemd/system/rpiTelemetry.service /etc/systemd/system/`
+* `sudo systemctl daemon-reload`
+* `sudo systemctl enable rpiTelemetry`
+* `sudo systemctl start rpiTelemetry`
+
+# install and enable rpiTelemetry service
+* `cd ${HOME}/Code/AircraftAudioId/audioCapture`
+* `sudo mkdir -p /etc/rpiTelemetry`
+* `sudo ex /etc/rpiTelemetry/mqtt.env`
+```
+MQTT_USER=<user>
+MQTT_PASSWORD=<passwd>
+```
+* `sudo chmod 600 /etc/rpiTelemetry/mqtt.env`
+* `sudo chown jdn:jdn /etc/rpiTelemetry/mqtt.env`
+* `sudo cp etc/systemd/system/rpiTelemetry.service /etc/systemd/system/`
+* `sudo systemctl daemon-reload`
+* `sudo systemctl enable rpiTelemetry`
+* `sudo systemctl start rpiTelemetry`
+* `sudo journalctl -u audioCapMonitor`  # check that it's publishing
+
+# stop ipv6 churn
+  sudo ex /etc/avahi/avahi-daemon.conf
+```
+use-ipv6=no
+```
+  sudo systemctl restart avahi-daemon
+  sudo systemctl status avahi-daemon
+  sudo journalctl -ra -u avahi-daemon
