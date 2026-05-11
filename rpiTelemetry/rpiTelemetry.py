@@ -227,7 +227,7 @@ def buildArgParser() -> argparse.ArgumentParser:
 
 def run(args: argparse.Namespace) -> None:
     client = mqtt.Client(
-        callback_api_version=mqtt.CallbackAPIVersion.VERSION1,
+        callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
         client_id=f"{HOST_NAME}-health-monitor"
     )
 
