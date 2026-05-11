@@ -226,7 +226,10 @@ def buildArgParser() -> argparse.ArgumentParser:
 
 
 def run(args: argparse.Namespace) -> None:
-    client = mqtt.Client(client_id=f"{HOST_NAME}-health-monitor")
+    client = mqtt.Client(
+        callback_api_version=mqtt.CallbackAPIVersion.VERSION1,
+        client_id=f"{HOST_NAME}-health-monitor"
+    )
 
     if args.user:
         client.username_pw_set(args.user, args.password)
