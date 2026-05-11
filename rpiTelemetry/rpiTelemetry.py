@@ -15,7 +15,10 @@ Usage:
                    [--iface wlan0]
                    [--user <user>] [--password <password>]
                    [--app_name <name>]
+                   [--remove]
 
+The '--remove' option will remove the persistent messages created by this
+ script from the HA's broker
 """
 
 import argparse
@@ -211,18 +214,19 @@ def collectMetrics(iface: str, app_name: str) -> dict:
 
 def buildArgParser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Publish Pi health metrics via MQTT")
-    p.add_argument("--broker",   required=True,              help="MQTT broker hostname or IP")
-    p.add_argument("--port",     type=int, default=1883,     help="MQTT broker port (default: 1883)")
-    p.add_argument("--interval", type=int, default=30,       help="Publish interval in seconds (default: 30)")
-    p.add_argument("--iface",    default="wlan0",            help="WiFi interface name (default: wlan0)")
-    p.add_argument("--user",     default=None,               help="MQTT username")
-    p.add_argument("--password", default=None,               help="MQTT password")
-    p.add_argument("--app_name",  default=None,              help="Name of application to monitor")
+    p.add_argument("--broker",    required=True,          help="MQTT broker hostname or IP")
+    p.add_argument("--port",      type=int, default=1883, help="MQTT broker port (default: 1883)")
+    p.add_argument("--interval",  type=int, default=30,   help="Publish interval in seconds (default: 30)")
+    p.add_argument("--iface",     default="wlan0",        help="WiFi interface name (default: wlan0)")
+    p.add_argument("--user",      default=None,           help="MQTT username")
+    p.add_argument("--password",  default=None,           help="MQTT password")
+    p.add_argument("--app_name",  default=None,           help="Name of application to monitor")
+    p.add_argument("--remove",    action="store_true",    help="Remove persistent messages and exit")
     return p
 
 
 def run(args: argparse.Namespace) -> None:
-    client = mqtt.Client(client_id="trixie-health-monitor")
+    client = mqtt.Client(client_id=f"{HOST_NAME}-health-monitor")
 
     if args.user:
         client.username_pw_set(args.user, args.password)
@@ -255,8 +259,8 @@ def run(args: argparse.Namespace) -> None:
         app_conf = (
             f"homeassistant/binary_sensor/{HOST_NAME}/config",
             {
-                "name": f"{app_name} Running",
-                "unique_id": f"{app_name}_running",
+                "name": f"{args.app_name} Running",
+                "unique_id": f"{args.app_name}_running",
                 "state_topic": STATE_TOPIC,
                 "value_template": "{{ 'ON' if value_json.appRunning else 'OFF' }}",
                 "device": _DEVICE,
@@ -264,6 +268,17 @@ def run(args: argparse.Namespace) -> None:
             },
         )
         DISCOVERY_CONFIGS.append(app_conf)
+
+    if args.remove:
+        for topic, payload in DISCOVERY_CONFIGS:
+            result = client.publish(topic, payload, qos=1, retain=True)
+            if result.rc == mqtt.MQTT_ERR_SUCCESS:
+                log.info("Null published: %s", topic)
+            else:
+                log.warning("Null publish failed (rc=%d) for %s — broker may be unreachable",
+                            result.rc, topic)
+                sys.exit(1)
+        sys.exit(0)
 
     for disc_topic, disc_payload in DISCOVERY_CONFIGS:
         payload = json.dumps(disc_payload)
