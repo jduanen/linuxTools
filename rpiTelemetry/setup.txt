@@ -29,15 +29,8 @@
 * restart chronyd
   - `sudo systemctl restart chronyd`
 
-# configure and setup the rpiTelemetry service
-* `cd ${HOME}/Code/linuxTools/rpiTelemetry/`
-* `sudo cp etc/systemd/system/rpiTelemetry.service /etc/systemd/system/`
-* `sudo systemctl daemon-reload`
-* `sudo systemctl enable rpiTelemetry`
-* `sudo systemctl start rpiTelemetry`
-
 # install and enable rpiTelemetry service
-* `cd ${HOME}/Code/AircraftAudioId/audioCapture`
+* `cd ${HOME}/Code/linuxTools/rpiTelemetry/`
 * `sudo mkdir -p /etc/rpiTelemetry`
 * `sudo ex /etc/rpiTelemetry/mqtt.env`
 ```
@@ -50,13 +43,13 @@ MQTT_PASSWORD=<passwd>
 * `sudo systemctl daemon-reload`
 * `sudo systemctl enable rpiTelemetry`
 * `sudo systemctl start rpiTelemetry`
-* `sudo journalctl -u audioCapMonitor`  # check that it's publishing
+* `sudo systemctl status rpiTelemetry`  # check that it's running correctly
 
 # stop ipv6 churn
-  sudo ex /etc/avahi/avahi-daemon.conf
+* `sudo ex /etc/avahi/avahi-daemon.conf`
 ```
 use-ipv6=no
 ```
-  sudo systemctl restart avahi-daemon
-  sudo systemctl status avahi-daemon
-  sudo journalctl -ra -u avahi-daemon
+* `sudo systemctl restart avahi-daemon`
+* `sudo systemctl status avahi-daemon`
+* `sudo journalctl -ra -u avahi-daemon`
