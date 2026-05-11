@@ -3,6 +3,10 @@ Random tools and scripts for linux
 
 ## Contents of the Directories
 
+### rpiTelemetry/
+
+Gathers telemetry from a Raspberry Pi and publishes via MQTT to Home Assistant for monitoring and logging.
+
 ### scripts/
 
 Mainly contains bash scripts that I use on various linux distros (e.g., Ubuntu, Fedora, Raspbian)
