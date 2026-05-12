@@ -1,7 +1,7 @@
 [Unit]
 Description=Publish health metrics (CPU temp, WiFi RSSI, uptime, and (optionally) app status) via MQTT
-#After=network.target ????.service
-#Wants=????.service
+After=network.target network-online.target
+Wants=avuePTZ.service
 
 [Service]
 Type=simple
@@ -14,7 +14,8 @@ ExecStart=/home/jdn/Code/linuxTools/rpiTelemetry/venv/bin/python \
     --broker 192.168.166.5 \
     --interval 60 \
     --user ${MQTT_USER} \
-    --password ${MQTT_PASSWORD}
+    --password ${MQTT_PASSWORD} \
+    --app_name avuePTZ.py
 Restart=always
 RestartSec=10
 
