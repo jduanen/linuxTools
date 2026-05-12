@@ -234,7 +234,7 @@ def run(args: argparse.Namespace) -> None:
     if args.user:
         client.username_pw_set(args.user, args.password)
 
-    def _on_connect(c, userdata, flags, rc):
+    def _on_connect(c, userdata, flags, rc, properties):
         if rc == 0:
             log.info("Connected to MQTT broker %s:%d", args.broker, args.port)
         else:
