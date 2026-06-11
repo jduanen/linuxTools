@@ -42,7 +42,7 @@ ubuntu() {
 
     # backup the snmpd default file and enable things
     sudo cp /etc/default/snmpd /etc/default/snmpd.orig
-    echo "SNMPDOPTS='-Lsd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux -p /run/snmpd.pid 0.0.0.0'" | tee -a /etc/default/snmpd
+    echo "SNMPDOPTS='-Lsd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux -p /run/snmpd.pid 0.0.0.0'" | sudo tee -a /etc/default/snmpd
 
 	# save a backup of the snmpd config file and enable listening on all ipv4 and ipv6 interfaces
 	sudo cp /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf.orig
