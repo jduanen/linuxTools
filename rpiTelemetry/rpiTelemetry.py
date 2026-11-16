@@ -185,9 +185,11 @@ def isCaptureRunning(app_name: str) -> bool:
     try:
         result = subprocess.run(
             ["pgrep", "-f", app_name],
-            capture_output=True,
+            capture_output=True, text=True,
         )
-        return result.returncode == 0
+        # Exclude this process: its own command line contains --app_name <name>
+        pids = set(result.stdout.split()) - {str(os.getpid())}
+        return bool(pids)
     except Exception:
         return False
 
@@ -204,7 +206,7 @@ def collectMetrics(iface: str, app_name: str) -> dict:
         "uptimeSecs": uptimeSecs(),
     }
     if app_name:
-        metrics["captureRunning"] = isCaptureRunning(app_name)
+        metrics["appRunning"] = isCaptureRunning(app_name)
     return metrics
 
 
@@ -240,9 +242,9 @@ def run(args: argparse.Namespace) -> None:
         else:
             log.warning("MQTT connect failed, rc=%d — will retry", rc)
 
-    def _on_disconnect(c, userdata, rc):
+    def _on_disconnect(c, userdata, flags, rc, properties):
         if rc != 0:
-            log.warning("MQTT disconnected unexpectedly (rc=%d), reconnecting…", rc)
+            log.warning("MQTT disconnected unexpectedly (%s), reconnecting…", rc)
 
     client.on_connect = _on_connect
     client.on_disconnect = _on_disconnect
